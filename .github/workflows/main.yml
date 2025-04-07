@@ -1,45 +1,50 @@
-name: Build APK
+name: Build Kivy APK
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    name: Build APK on Ubuntu Latest
+    runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout source
+      uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
-        python-version: '3.11'
+        python-version: '3.10'
 
-    - name: Install dependencies
+    - name: Install system dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y --no-install-recommends \
+        sudo apt-get install -y \
+          build-essential \
           git \
           zip \
-          openjdk-17-jdk-headless \
+          unzip \
+          openjdk-17-jdk \
           python3-pip \
-          autoconf \
-          libtool \
-          pkg-config \
-          zlib1g-dev \
-          libncurses5-dev \
-          libncursesw5-dev \
-          libtinfo5 \
-          cmake \
           libffi-dev \
-          unzip
+          libssl-dev \
+          libsqlite3-dev \
+          libpng-dev \
+          libfreetype6-dev \
+          libz-dev \
+          libjpeg-dev \
+          pkg-config \
+          libncurses5 \
+          libncurses5-dev \
+          libtinfo5
 
+    - name: Install Buildozer
+      run: |
         pip install --upgrade pip
-        pip install pyzstd
-        pip install kivy[full]
+        pip install cython
         pip install buildozer
 
     - name: Build APK
@@ -49,6 +54,6 @@ jobs:
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: android-app
+        name: kivy-apk
         path: bin/*.apk
         
