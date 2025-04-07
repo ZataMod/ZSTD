@@ -37,9 +37,8 @@ jobs:
           libz-dev \
           libjpeg-dev \
           pkg-config \
-          libncurses5 \
-          libncurses5-dev \
-          libtinfo5
+          libncurses6 \
+          libncurses-dev
 
     - name: Install Buildozer
       run: |
